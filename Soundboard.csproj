@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="bin\Debug\net8.0-windows\Music\" />
     <Folder Include="bin\Debug\net8.0-windows\Sounds\" />
     <Folder Include="bin\Release\net8.0-windows\" />
   </ItemGroup>

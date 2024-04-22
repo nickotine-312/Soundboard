@@ -12,28 +12,32 @@ namespace Soundboard
         public WMPLib.WindowsMediaPlayer wplayer6;
         public WMPLib.WindowsMediaPlayer wplayer7;
         public WMPLib.WindowsMediaPlayer wplayer8;
+        public WMPLib.WindowsMediaPlayer wplayer9;
+        public Dictionary<string, WMPLib.WindowsMediaPlayer> wPlayerList = new Dictionary<string, WindowsMediaPlayer>();
         private List<SoundFile> soundDefaults = new List<SoundFile>();
+        private List<SoundFile> musicDefaults = new List<SoundFile>();
 
         public Form1()
         {
             InitializeComponent();
 
-            //Initialize all players here, so they are not re-created on each button click.
-            wplayer1 = new WMPLib.WindowsMediaPlayer();
-            wplayer2 = new WMPLib.WindowsMediaPlayer();
-            wplayer3 = new WMPLib.WindowsMediaPlayer();
-            wplayer4 = new WMPLib.WindowsMediaPlayer();
-            wplayer5 = new WMPLib.WindowsMediaPlayer();
-            wplayer6 = new WMPLib.WindowsMediaPlayer();
-            wplayer7 = new WMPLib.WindowsMediaPlayer();
-            wplayer8 = new WMPLib.WindowsMediaPlayer();
+            //Initialize all players here, set defaults, add to list.
+            wplayer1 = new WMPLib.WindowsMediaPlayer(); wplayer1.settings.setMode("loop", true); wPlayerList.Add("wplayer1", wplayer1);
+            wplayer2 = new WMPLib.WindowsMediaPlayer(); wplayer2.settings.setMode("loop", true); wPlayerList.Add("wplayer2", wplayer2);
+            wplayer3 = new WMPLib.WindowsMediaPlayer(); wplayer3.settings.setMode("loop", true); wPlayerList.Add("wplayer3", wplayer3);
+            wplayer4 = new WMPLib.WindowsMediaPlayer(); wplayer4.settings.setMode("loop", true); wPlayerList.Add("wplayer4", wplayer4);
+            wplayer5 = new WMPLib.WindowsMediaPlayer(); wplayer5.settings.setMode("loop", true); wPlayerList.Add("wplayer5", wplayer5);
+            wplayer6 = new WMPLib.WindowsMediaPlayer(); wplayer6.settings.setMode("loop", true); wPlayerList.Add("wplayer6", wplayer6);
+            wplayer7 = new WMPLib.WindowsMediaPlayer(); wplayer7.settings.setMode("loop", true); wPlayerList.Add("wplayer7", wplayer7);
+            wplayer8 = new WMPLib.WindowsMediaPlayer(); wplayer8.settings.setMode("loop", true); wPlayerList.Add("wplayer8", wplayer8);
+            wplayer9 = new WMPLib.WindowsMediaPlayer(); wplayer9.settings.setMode("loop", true); wPlayerList.Add("wplayer9", wplayer9);
 
-            #region populate default sound objects, and related dropdown boxes.
+            #region populate default sound and music objects, and related dropdown boxes.
             //Populate the soundDefaults list with each file found in Sounds
             string[] soundFiles = Directory.GetFiles(@"Sounds\");
             foreach (string sound in soundFiles)
             {
-                if (sound.Contains(".jpg")) { continue; }
+                if (sound.Contains(".jpg")) { continue; } //TODO: Expand this check with regex and supported file types.
 
                 string displayName = sound.Replace(@"Sounds\", "");
                 displayName = displayName.Substring(0, displayName.IndexOf('.'));
@@ -46,7 +50,6 @@ namespace Soundboard
             {
                 fileNames.Add(file.getDisplayName());
             }
-            List<String> fnameDupe = fileNames.ToList();
 
             //We call .ToList() to create a copy each time. Using the same object caused duplicate event issues.
             this.btn1SoundSelectBox.DataSource = fileNames.ToList();
@@ -55,109 +58,122 @@ namespace Soundboard
             this.btn2SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             this.btn3SoundSelectBox.DataSource = fileNames.ToList();
             this.btn3SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.btn4SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn4SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.btn5SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn5SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.btn6SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn6SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.btn7SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn7SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.btn8SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn8SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+
+            //TODO: Populate the MUSIC similarly to the Sound above. 
+            string[] musicFiles = Directory.GetFiles(@"Music\");
+            foreach (string music in musicFiles)
+            {
+                if (music.Contains(".jpg")) { continue; } //TODO: Expand this check with regex and supported file types.
+
+                string displayName = music.Replace(@"Music\", "");
+                displayName = displayName.Substring(0, displayName.IndexOf('.'));
+                musicDefaults.Add(new SoundFile(music, displayName));
+            }
+            //Grab only the display names, and populate the dropdown.
+            List<String> songNames = new List<String>();
+            foreach (SoundFile song in musicDefaults)
+            {
+                songNames.Add(song.getDisplayName());
+            }
+            this.btn9MusicSelectBox.DataSource = songNames.ToList();
+            this.btn9MusicSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             #endregion
 
             //List of various ideas here:
             //TODO: Add a button to toggle looping for each soundboard button.
-            //TODO: Add a series of dropdowns (or a new form?) allowing the user to select different files.
-            //TODO: Do we order the code by object type (all clicks grouped together) or source (all button1 methods grouped together.)
+            //TODO: Add a series of dropdowns (or a new form?) allowing the user to select different files on their machine (or do they do this manually idk).
             //TODO: have a "scene selector" dropdown which can autopopulate each button with a predefined set of stuff
             //TODO: Have a custom scene creator that adds different scenes to the list. 
-            //TODO: Dropdown for selectin background image (or toolbar option?)
+            //TODO: Dropdown for selecting background image (or toolbar option?) //TODO: make backgrounds not look terrible.
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button_click(object sender, EventArgs e)
         {
+            Button btn = (Button)sender;
+            string playerName = (string)btn.Tag;
 
-            WMPPlayState isPlaying = wplayer1.playState;
-            Debug.WriteLine("playstate is " + isPlaying);
+            WMPLib.WindowsMediaPlayer wmp = wPlayerList[playerName];
+            WMPPlayState isPlaying = wmp.playState;
+
+            //Debug.WriteLine("GENERIC playstate of " + playerName + " is " + isPlaying);
 
             if (isPlaying.Equals(WMPPlayState.wmppsPlaying))
             {
-                wplayer1.controls.stop();
+                wmp.controls.stop();
             }
             else
             {
-                wplayer1.controls.play();
-                wplayer1.settings.setMode("loop", true); //TODO: fix stutter step on first loop. 
+                wmp.controls.play();
+                //wmp.settings.setMode("loop", true); //TODO: fix stutter step on first loop. 
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void loop_toggle(object sender, EventArgs e)
         {
-            WMPPlayState isPlaying = wplayer2.playState;
-            Debug.WriteLine("playstate is " + isPlaying);
+            CheckBox box = (CheckBox)sender;
+            string playerName = (string)box.Tag;
+            WMPLib.WindowsMediaPlayer wmp = wPlayerList[playerName];
+            bool isLooped = wmp.settings.getMode("loop");
 
-            if (isPlaying.Equals(WMPPlayState.wmppsPlaying))
-            {
-                wplayer2.controls.stop();
-            }
-            else
-            {
-                wplayer2.controls.play();
-                wplayer2.settings.setMode("loop", true); //TODO: fix stutter step on first loop. 
-            }
+            wmp.settings.setMode("loop", !isLooped);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void trackBar_Scroll(object sender, EventArgs e)
         {
-            WMPPlayState isPlaying = wplayer3.playState;
-            Debug.WriteLine("playstate is " + isPlaying);
+            TrackBar bar = (TrackBar)sender;
+            string playerName = (string)bar.Tag;
 
-            if (isPlaying.Equals(WMPPlayState.wmppsPlaying))
-            {
-                wplayer3.controls.stop();
-            }
-            else
-            {
-                wplayer3.controls.play();
-                wplayer3.settings.setMode("loop", true); //TODO: fix stutter step on first loop. 
-            }
+            wPlayerList[playerName].settings.volume = bar.Value;
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void selectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            wplayer1.settings.volume = trackBar1.Value;
-        }
-        private void trackBar2_Scroll(object sender, EventArgs e)
-        {
-            wplayer2.settings.volume = trackBar2.Value;
-        }
-        private void trackBar3_Scroll(object sender, EventArgs e)
-        {
-            wplayer3.settings.volume = trackBar3.Value;
+            ComboBox comboBox = (ComboBox)sender;
+            string playerName = (string)comboBox.Tag;
+            WMPLib.WindowsMediaPlayer wmp = wPlayerList[playerName];
+
+            string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(comboBox.Text)).getFilePath();
+
+            wmp.URL = newFileName;
+            wmp.controls.stop();
+
+            //Getting the button name, there's probably a better way...
+            //Construct desired button name using last char of playerName (e.g. wmplayer1 -> 1), AKA the ID of the button in question
+            Button btn = new Button();
+            bool found = false;
+            string buttonName = "button" + playerName[^1];
+            foreach (Button item in this.Controls.OfType<Button>())
+                if (item.Name == buttonName)
+                {
+                    btn = item;
+                    found = true;
+                    break;
+                }
+
+            if (found) { btn.Text = comboBox.Text; }
+            else { Debug.WriteLine("No button was found with the name " + buttonName); } //Error handling to replace DEBUG
         }
 
-
-        private void btn1SoundSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        //This gets its own function because it searches the Music list, rather than the sound list. 
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(btn1SoundSelectBox.Text)).getFilePath();
-            Debug.WriteLine("New file path 1 is " + newFileName);
+            string newFileName = musicDefaults.Find(soundFile => soundFile.getDisplayName().Equals(btn9MusicSelectBox.Text)).getFilePath();
 
-            //Update the file for button 1 and also update the text of the button to reflect this change. 
-            wplayer1.URL = newFileName;
-            button1.Text = btn1SoundSelectBox.Text;
-            wplayer1.controls.stop();
-        }
-        private void btn2SoundSelectBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(btn2SoundSelectBox.Text)).getFilePath();
-            Debug.WriteLine("New file path 2 is " + newFileName);
+            wplayer9.URL = newFileName;
+            wplayer9.controls.stop();
 
-            //Update the file for button 2 and also update the text of the button to reflect this change. 
-            wplayer2.URL = newFileName;
-            button2.Text = btn2SoundSelectBox.Text;
-            wplayer2.controls.stop();
-        }
-        private void btn3SoundSelectBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(btn3SoundSelectBox.Text)).getFilePath();
-            Debug.WriteLine("New file path 3 is " + newFileName);
-
-            //Update the file for button 3 and also update the text of the button to reflect this change. 
-            wplayer3.URL = newFileName;
-            button3.Text = btn3SoundSelectBox.Text;
-            wplayer3.controls.stop();
+            button9.Text = btn9MusicSelectBox.Text;
         }
 
         private class SoundFile(string fpath, string dname)
@@ -174,9 +190,6 @@ namespace Soundboard
             {
                 return displayName;
             }
-
         }
-
-
     }
 }
