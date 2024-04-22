@@ -33,7 +33,6 @@ namespace Soundboard
             wplayer9 = new WMPLib.WindowsMediaPlayer(); wplayer9.settings.setMode("loop", true); wPlayerList.Add("wplayer9", wplayer9);
 
             #region populate default sound and music objects, and related dropdown boxes.
-            //Populate the soundDefaults list with each file found in Sounds
             string[] soundFiles = Directory.GetFiles(@"Sounds\");
             foreach (string sound in soundFiles)
             {
@@ -69,8 +68,7 @@ namespace Soundboard
             this.btn8SoundSelectBox.DataSource = fileNames.ToList();
             this.btn8SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-
-            //TODO: Populate the MUSIC similarly to the Sound above. 
+            //TODO: Populate the music similarly to the Sound above. 
             string[] musicFiles = Directory.GetFiles(@"Music\");
             foreach (string music in musicFiles)
             {
@@ -91,11 +89,12 @@ namespace Soundboard
             #endregion
 
             //List of various ideas here:
-            //TODO: Add a button to toggle looping for each soundboard button.
-            //TODO: Add a series of dropdowns (or a new form?) allowing the user to select different files on their machine (or do they do this manually idk).
+            //TODO: Add a series of dropdowns (or a new form?) allowing the user to select different files on their machine?
             //TODO: have a "scene selector" dropdown which can autopopulate each button with a predefined set of stuff
             //TODO: Have a custom scene creator that adds different scenes to the list. 
-            //TODO: Dropdown for selecting background image (or toolbar option?) //TODO: make backgrounds not look terrible.
+            //TODO: make backgrounds not look terrible.
+            //TODO: Dropdown for selecting background image (or toolbar option?)
+            //TODO: Fix stutter on first loop iteration.
         }
 
         private void button_click(object sender, EventArgs e)
@@ -106,8 +105,6 @@ namespace Soundboard
             WMPLib.WindowsMediaPlayer wmp = wPlayerList[playerName];
             WMPPlayState isPlaying = wmp.playState;
 
-            //Debug.WriteLine("GENERIC playstate of " + playerName + " is " + isPlaying);
-
             if (isPlaying.Equals(WMPPlayState.wmppsPlaying))
             {
                 wmp.controls.stop();
@@ -115,7 +112,6 @@ namespace Soundboard
             else
             {
                 wmp.controls.play();
-                //wmp.settings.setMode("loop", true); //TODO: fix stutter step on first loop. 
             }
         }
 
@@ -162,7 +158,7 @@ namespace Soundboard
                 }
 
             if (found) { btn.Text = comboBox.Text; }
-            else { Debug.WriteLine("No button was found with the name " + buttonName); } //Error handling to replace DEBUG
+            else { Debug.WriteLine("No button was found with the name " + buttonName); } //Add error handling to replace DEBUG
         }
 
         //This gets its own function because it searches the Music list, rather than the sound list. 
