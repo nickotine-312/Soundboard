@@ -160,11 +160,12 @@ namespace Soundboard
         {
             ComboBox comboBox = (ComboBox)sender;
             if(comboBox.SelectedItem == null) { return; }
+
             string playerName = (string)comboBox.Tag;
             WMPLib.WindowsMediaPlayer wmp = wPlayerList[playerName];
             string buttonName = "button" + playerName[^1];
-            //string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(comboBox.Text)).getFilePath();
             string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(comboBox.Text)).getDisplayName();
+
             updateButton(buttonName, playerName, newFileName);
         }
 
@@ -182,19 +183,13 @@ namespace Soundboard
             button9.Text = btn9MusicSelectBox.Text;
         }
 
+        //TODO: How to optimize the speed of this? In setScene, this function is called 8x. Can that be improved?
         private void updateButton(string btnName, string wpName, string sound)
         {
-            Debug.WriteLine("Called for " + btnName + " " + wpName + " " + sound);
-            foreach(Button item in this.Controls.OfType<Button>())
-            {
-                if (item.Name == btnName)
-                {
-                    item.Text = sound;
-                    WMPLib.WindowsMediaPlayer wmp = wPlayerList[wpName];
-                    wmp.URL = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(sound)).getFilePath();
-                    wmp.controls.stop();
-                }
-            }
+            this.Controls.Find(btnName, true)[0].Text = sound;
+            WMPLib.WindowsMediaPlayer wmp = wPlayerList[wpName];
+            wmp.URL = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(sound)).getFilePath();
+            wmp.controls.stop();
         }
 
         #region Functions for the scene selector dropdown
