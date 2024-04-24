@@ -59,7 +59,7 @@
             label2 = new Label();
             folderBrowserDialog1 = new FolderBrowserDialog();
             label3 = new Label();
-            comboBox1 = new ComboBox();
+            sceneSelectorBox = new ComboBox();
             trackBar2 = new TrackBar();
             trackBar3 = new TrackBar();
             trackBar4 = new TrackBar();
@@ -78,6 +78,7 @@
             btn9MusicSelectBox = new ComboBox();
             trackBar9 = new TrackBar();
             groupBox2 = new GroupBox();
+            checkBox9 = new CheckBox();
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
             checkBox3 = new CheckBox();
@@ -86,7 +87,6 @@
             checkBox6 = new CheckBox();
             checkBox7 = new CheckBox();
             checkBox8 = new CheckBox();
-            checkBox9 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
@@ -431,14 +431,15 @@
             label3.TabIndex = 13;
             label3.Text = "Scene selector";
             // 
-            // comboBox1
+            // sceneSelectorBox
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(535, 187);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
-            comboBox1.TabIndex = 14;
-            comboBox1.Text = "TBA";
+            sceneSelectorBox.FormattingEnabled = true;
+            sceneSelectorBox.Location = new Point(535, 187);
+            sceneSelectorBox.Name = "sceneSelectorBox";
+            sceneSelectorBox.Size = new Size(121, 23);
+            sceneSelectorBox.TabIndex = 14;
+            sceneSelectorBox.Text = "TBA";
+            sceneSelectorBox.SelectedIndexChanged += setScene;
             // 
             // trackBar2
             // 
@@ -642,6 +643,20 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Music";
             // 
+            // checkBox9
+            // 
+            checkBox9.AutoSize = true;
+            checkBox9.Checked = true;
+            checkBox9.CheckState = CheckState.Checked;
+            checkBox9.Location = new Point(71, 112);
+            checkBox9.Name = "checkBox9";
+            checkBox9.Size = new Size(53, 19);
+            checkBox9.TabIndex = 42;
+            checkBox9.Tag = "wplayer9";
+            checkBox9.Text = "Loop";
+            checkBox9.UseVisualStyleBackColor = true;
+            checkBox9.CheckedChanged += loop_toggle;
+            // 
             // checkBox1
             // 
             checkBox1.AutoSize = true;
@@ -754,20 +769,6 @@
             checkBox8.UseVisualStyleBackColor = true;
             checkBox8.CheckedChanged += loop_toggle;
             // 
-            // checkBox9
-            // 
-            checkBox9.AutoSize = true;
-            checkBox9.Checked = true;
-            checkBox9.CheckState = CheckState.Checked;
-            checkBox9.Location = new Point(71, 112);
-            checkBox9.Name = "checkBox9";
-            checkBox9.Size = new Size(53, 19);
-            checkBox9.TabIndex = 42;
-            checkBox9.Tag = "wplayer9";
-            checkBox9.Text = "Loop";
-            checkBox9.UseVisualStyleBackColor = true;
-            checkBox9.CheckedChanged += loop_toggle;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -796,7 +797,7 @@
             Controls.Add(trackBar4);
             Controls.Add(trackBar3);
             Controls.Add(trackBar2);
-            Controls.Add(comboBox1);
+            Controls.Add(sceneSelectorBox);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(groupBox1);
@@ -849,7 +850,7 @@
         private FolderBrowserDialog folderBrowserDialog1;
         private ComboBox btn1SoundSelectBox;
         private Label label3;
-        private ComboBox comboBox1;
+        private ComboBox sceneSelectorBox;
         private TrackBar trackBar2;
         private ComboBox btn2SoundSelectBox;
         private Label btn2FileSelectLabel;

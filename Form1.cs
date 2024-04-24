@@ -1,5 +1,6 @@
 using WMPLib;
-using System.Diagnostics; //TODO: Remove when done debugging
+using System.Diagnostics;
+using System.Windows.Forms.VisualStyles; //TODO: Remove when done debugging
 namespace Soundboard
 {
     public partial class Form1 : Form
@@ -13,7 +14,8 @@ namespace Soundboard
         public WMPLib.WindowsMediaPlayer wplayer7;
         public WMPLib.WindowsMediaPlayer wplayer8;
         public WMPLib.WindowsMediaPlayer wplayer9;
-        public Dictionary<string, WMPLib.WindowsMediaPlayer> wPlayerList = new Dictionary<string, WindowsMediaPlayer>();
+        private Dictionary<string, WMPLib.WindowsMediaPlayer> wPlayerList = new Dictionary<string, WindowsMediaPlayer>();
+        private Dictionary<string, List<string>> sceneList = new Dictionary<string, List<string>>();
         private List<SoundFile> soundDefaults = new List<SoundFile>();
         private List<SoundFile> musicDefaults = new List<SoundFile>();
 
@@ -32,7 +34,8 @@ namespace Soundboard
             wplayer8 = new WMPLib.WindowsMediaPlayer(); wplayer8.settings.setMode("loop", true); wPlayerList.Add("wplayer8", wplayer8);
             wplayer9 = new WMPLib.WindowsMediaPlayer(); wplayer9.settings.setMode("loop", true); wPlayerList.Add("wplayer9", wplayer9);
 
-            #region populate default sound and music objects, and related dropdown boxes.
+            #region populate default sound, scene, and music objects, and related dropdown boxes.
+            //First: Sounds
             string[] soundFiles = Directory.GetFiles(@"Sounds\");
             foreach (string sound in soundFiles)
             {
@@ -68,7 +71,7 @@ namespace Soundboard
             this.btn8SoundSelectBox.DataSource = fileNames.ToList();
             this.btn8SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            //TODO: Populate the music similarly to the Sound above. 
+            //Second: Music
             string[] musicFiles = Directory.GetFiles(@"Music\");
             foreach (string music in musicFiles)
             {
@@ -85,7 +88,15 @@ namespace Soundboard
                 songNames.Add(song.getDisplayName());
             }
             this.btn9MusicSelectBox.DataSource = songNames.ToList();
+            this.btn9MusicSelectBox.SelectedItem = null;
             this.btn9MusicSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            //Third: Scenes
+            populateScenes();
+            var scenes = sceneList.Keys;
+            this.sceneSelectorBox.DataSource = scenes.ToList();
+            this.sceneSelectorBox.SelectedItem = null;
+            this.sceneSelectorBox.DropDownStyle= ComboBoxStyle.DropDownList;
             #endregion
 
             //List of various ideas here:
@@ -164,6 +175,9 @@ namespace Soundboard
         //This gets its own function because it searches the Music list, rather than the sound list. 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ComboBox comboBox = (ComboBox)sender;
+            if (comboBox.SelectedItem == null) { return; }
+
             string newFileName = musicDefaults.Find(soundFile => soundFile.getDisplayName().Equals(btn9MusicSelectBox.Text)).getFilePath();
 
             wplayer9.URL = newFileName;
@@ -171,6 +185,68 @@ namespace Soundboard
 
             button9.Text = btn9MusicSelectBox.Text;
         }
+
+        #region Functions for the scene selector dropdown
+        private void/*?*/ setScene(object sender, EventArgs e)
+        {
+            //TODO: Optimize the run of this, maybe make a function of the button stuff and fork those off as subprocs or something. 
+            ComboBox comboBox = (ComboBox)sender;
+            if (comboBox.SelectedItem == null) { return; }
+            string sceneName = (string)comboBox.Text;
+            string buttonName;
+            string wplayerName;
+            string soundName;
+            WMPLib.WindowsMediaPlayer wmp;
+
+            List<string> sounds = sceneList[sceneName];
+            for(int i = 0; i < sounds.Count; i++)
+            {
+                buttonName = "button" + (i + 1);
+                wplayerName = "wplayer" + (i + 1);
+                soundName = sounds[i];
+
+                foreach (Button item in this.Controls.OfType<Button>())
+                {
+                    if(item.Name == buttonName)
+                    {
+                        item.Text = soundName;
+                        wmp = wPlayerList[wplayerName];
+                        wmp.URL = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(soundName)).getFilePath();
+                        wmp.controls.stop();
+                    }
+                }
+            }
+        }
+
+        private void clearScene(object sender, EventArgs e)
+        {
+            //special function invoked by the scene "Clear"
+        }
+
+        private void populateScenes()
+        {
+            string[] scenes = Directory.GetFiles(@"Scenes\");
+            foreach(string scene in scenes)
+            {
+                string sceneName = scene.Replace(@"Scenes\", "");
+                sceneName = sceneName.Substring(0, sceneName.IndexOf('.'));
+
+                List<string> sounds = new List<string>();
+
+                StreamReader sr = new StreamReader(scene);
+                string line = sr.ReadLine();
+                while(line != null)
+                {
+                    Debug.WriteLine(line);
+                    sounds.Add(line);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+                
+                sceneList.Add(sceneName, sounds);
+            }
+        }
+        #endregion
 
         private class SoundFile(string fpath, string dname)
         {
