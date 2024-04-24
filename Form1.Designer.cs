@@ -256,7 +256,7 @@
             btn8SoundSelectBox.TabIndex = 27;
             btn8SoundSelectBox.Tag = "wplayer8";
             btn8SoundSelectBox.Text = "Select Sound";
-            btn8SoundSelectBox.SelectedIndexChanged += selectBox_SelectedIndexChanged;
+            btn8SoundSelectBox.SelectedIndexChanged += comboBox_SelectedIndexChanged;
             // 
             // btn7SoundSelectBox
             // 
@@ -267,7 +267,7 @@
             btn7SoundSelectBox.TabIndex = 26;
             btn7SoundSelectBox.Tag = "wplayer7";
             btn7SoundSelectBox.Text = "Select Sound";
-            btn7SoundSelectBox.SelectedIndexChanged += selectBox_SelectedIndexChanged;
+            btn7SoundSelectBox.SelectedIndexChanged += comboBox_SelectedIndexChanged;
             // 
             // btn6SoundSelectBox
             // 
@@ -278,7 +278,7 @@
             btn6SoundSelectBox.TabIndex = 25;
             btn6SoundSelectBox.Tag = "wplayer6";
             btn6SoundSelectBox.Text = "Select Sound";
-            btn6SoundSelectBox.SelectedIndexChanged += selectBox_SelectedIndexChanged;
+            btn6SoundSelectBox.SelectedIndexChanged += comboBox_SelectedIndexChanged;
             // 
             // btn5SoundSelectBox
             // 
@@ -289,7 +289,7 @@
             btn5SoundSelectBox.TabIndex = 24;
             btn5SoundSelectBox.Tag = "wplayer5";
             btn5SoundSelectBox.Text = "Select Sound";
-            btn5SoundSelectBox.SelectedIndexChanged += selectBox_SelectedIndexChanged;
+            btn5SoundSelectBox.SelectedIndexChanged += comboBox_SelectedIndexChanged;
             // 
             // btn4SoundSelectBox
             // 
@@ -300,7 +300,7 @@
             btn4SoundSelectBox.TabIndex = 23;
             btn4SoundSelectBox.Tag = "wplayer4";
             btn4SoundSelectBox.Text = "Select Sound";
-            btn4SoundSelectBox.SelectedIndexChanged += selectBox_SelectedIndexChanged;
+            btn4SoundSelectBox.SelectedIndexChanged += comboBox_SelectedIndexChanged;
             // 
             // btn8FileSelectLabel
             // 
@@ -357,7 +357,7 @@
             btn3SoundSelectBox.TabIndex = 18;
             btn3SoundSelectBox.Tag = "wplayer3";
             btn3SoundSelectBox.Text = "Select Sound";
-            btn3SoundSelectBox.SelectedIndexChanged += selectBox_SelectedIndexChanged;
+            btn3SoundSelectBox.SelectedIndexChanged += comboBox_SelectedIndexChanged;
             // 
             // btn3FileSelectLabel
             // 
@@ -379,7 +379,7 @@
             btn2SoundSelectBox.TabIndex = 16;
             btn2SoundSelectBox.Tag = "wplayer2";
             btn2SoundSelectBox.Text = "Select Sound";
-            btn2SoundSelectBox.SelectedIndexChanged += selectBox_SelectedIndexChanged;
+            btn2SoundSelectBox.SelectedIndexChanged += comboBox_SelectedIndexChanged;
             // 
             // btn2FileSelectLabel
             // 
@@ -402,7 +402,7 @@
             btn1SoundSelectBox.TabIndex = 1;
             btn1SoundSelectBox.Tag = "wplayer1";
             btn1SoundSelectBox.Text = "Select Sound";
-            btn1SoundSelectBox.SelectedIndexChanged += selectBox_SelectedIndexChanged;
+            btn1SoundSelectBox.SelectedIndexChanged += comboBox_SelectedIndexChanged;
             // 
             // btn1FileSelectLabel
             // 

@@ -156,7 +156,7 @@ namespace Soundboard
             wPlayerList[playerName].settings.volume = bar.Value;
         }
 
-        private void selectBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
             if(comboBox.SelectedItem == null) { return; }
