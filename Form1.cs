@@ -162,27 +162,10 @@ namespace Soundboard
             if(comboBox.SelectedItem == null) { return; }
             string playerName = (string)comboBox.Tag;
             WMPLib.WindowsMediaPlayer wmp = wPlayerList[playerName];
-
-            string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(comboBox.Text)).getFilePath();
-
-            wmp.URL = newFileName;
-            wmp.controls.stop();
-
-            //Getting the button name, there's probably a better way...
-            //Construct desired button name using last char of playerName (e.g. wmplayer1 -> 1), AKA the ID of the button in question
-            Button btn = new Button();
-            bool found = false;
             string buttonName = "button" + playerName[^1];
-            foreach (Button item in this.Controls.OfType<Button>())
-                if (item.Name == buttonName)
-                {
-                    btn = item;
-                    found = true;
-                    break;
-                }
-
-            if (found) { btn.Text = comboBox.Text; }
-            else { Debug.WriteLine("No button was found with the name " + buttonName); } //Add error handling to replace DEBUG
+            //string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(comboBox.Text)).getFilePath();
+            string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(comboBox.Text)).getDisplayName();
+            updateButton(buttonName, playerName, newFileName);
         }
 
         //This gets its own function because it searches the Music list, rather than the sound list. 
@@ -199,17 +182,31 @@ namespace Soundboard
             button9.Text = btn9MusicSelectBox.Text;
         }
 
+        private void updateButton(string btnName, string wpName, string sound)
+        {
+            Debug.WriteLine("Called for " + btnName + " " + wpName + " " + sound);
+            foreach(Button item in this.Controls.OfType<Button>())
+            {
+                if (item.Name == btnName)
+                {
+                    item.Text = sound;
+                    WMPLib.WindowsMediaPlayer wmp = wPlayerList[wpName];
+                    wmp.URL = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(sound)).getFilePath();
+                    wmp.controls.stop();
+                }
+            }
+        }
+
         #region Functions for the scene selector dropdown
         private void setScene(object sender, EventArgs e)
         {
-            //TODO: Optimize the run of this, maybe make a function of the button stuff and fork those off as subprocs or something. 
+            //TODO: Optimize the run of this, learn async. 
             ComboBox comboBox = (ComboBox)sender;
             if (comboBox.SelectedItem == null) { return; }
             string sceneName = (string)comboBox.Text;
             string buttonName;
             string wplayerName;
             string soundName;
-            WMPLib.WindowsMediaPlayer wmp;
 
             if(sceneName == "Clear")
             {
@@ -224,22 +221,13 @@ namespace Soundboard
                 wplayerName = "wplayer" + (i + 1);
                 soundName = sounds[i];
 
-                foreach (Button item in this.Controls.OfType<Button>())
-                {
-                    if(item.Name == buttonName)
-                    {
-                        item.Text = soundName;
-                        wmp = wPlayerList[wplayerName];
-                        wmp.URL = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(soundName)).getFilePath();
-                        wmp.controls.stop();
-                    }
-                }
+                updateButton(buttonName, wplayerName, soundName);
             }
         }
 
+        //special function invoked by the scene "Clear"
         private void clearScene()
         {
-            //special function invoked by the scene "Clear"
             foreach(Button btn in this.Controls.OfType<Button>())
             {
                 //For every button except 9, which is music and not sounds
@@ -252,6 +240,7 @@ namespace Soundboard
                     wmp.controls.stop();
                 }
             }
+            //TODO: Do we also reset volume sliders here?
         }
 
         private void populateScenes()
