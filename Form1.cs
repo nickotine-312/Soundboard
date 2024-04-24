@@ -1,6 +1,8 @@
 using WMPLib;
-using System.Diagnostics;
-using System.Windows.Forms.VisualStyles; //TODO: Remove when done debugging
+using System.Windows.Forms.VisualStyles;
+using System.Text.RegularExpressions;
+using System.Diagnostics; //TODO: Remove when done debugging
+
 namespace Soundboard
 {
     public partial class Form1 : Form
@@ -14,10 +16,11 @@ namespace Soundboard
         public WMPLib.WindowsMediaPlayer wplayer7;
         public WMPLib.WindowsMediaPlayer wplayer8;
         public WMPLib.WindowsMediaPlayer wplayer9;
-        private Dictionary<string, WMPLib.WindowsMediaPlayer> wPlayerList = new Dictionary<string, WindowsMediaPlayer>();
         private Dictionary<string, List<string>> sceneList = new Dictionary<string, List<string>>();
+        private Dictionary<string, WMPLib.WindowsMediaPlayer> wPlayerList = new Dictionary<string, WindowsMediaPlayer>();
         private List<SoundFile> soundDefaults = new List<SoundFile>();
         private List<SoundFile> musicDefaults = new List<SoundFile>();
+        private string validFileExtensions = @"\.(mp3|wav|m4a|avi)";
 
         public Form1()
         {
@@ -39,7 +42,7 @@ namespace Soundboard
             string[] soundFiles = Directory.GetFiles(@"Sounds\");
             foreach (string sound in soundFiles)
             {
-                if (sound.Contains(".jpg")) { continue; } //TODO: Expand this check with regex and supported file types.
+                if (!Regex.IsMatch(sound, validFileExtensions)) { continue; }
 
                 string displayName = sound.Replace(@"Sounds\", "");
                 displayName = displayName.Substring(0, displayName.IndexOf('.'));
@@ -55,27 +58,35 @@ namespace Soundboard
 
             //We call .ToList() to create a copy each time. Using the same object caused duplicate event issues.
             this.btn1SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn1SoundSelectBox.SelectedItem = null;
             this.btn1SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             this.btn2SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn2SoundSelectBox.SelectedItem = null;
             this.btn2SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             this.btn3SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn3SoundSelectBox.SelectedItem = null;
             this.btn3SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             this.btn4SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn4SoundSelectBox.SelectedItem = null;
             this.btn4SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             this.btn5SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn5SoundSelectBox.SelectedItem = null;
             this.btn5SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             this.btn6SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn6SoundSelectBox.SelectedItem = null;
             this.btn6SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             this.btn7SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn7SoundSelectBox.SelectedItem = null;
             this.btn7SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             this.btn8SoundSelectBox.DataSource = fileNames.ToList();
+            this.btn8SoundSelectBox.SelectedItem = null;
             this.btn8SoundSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
             //Second: Music
             string[] musicFiles = Directory.GetFiles(@"Music\");
             foreach (string music in musicFiles)
             {
-                if (music.Contains(".jpg")) { continue; } //TODO: Expand this check with regex and supported file types.
+                if (!Regex.IsMatch(music, validFileExtensions)) { continue; }
 
                 string displayName = music.Replace(@"Music\", "");
                 displayName = displayName.Substring(0, displayName.IndexOf('.'));
@@ -90,18 +101,19 @@ namespace Soundboard
             this.btn9MusicSelectBox.DataSource = songNames.ToList();
             this.btn9MusicSelectBox.SelectedItem = null;
             this.btn9MusicSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.button9.Text = "Select Sound";
 
             //Third: Scenes
             populateScenes();
             var scenes = sceneList.Keys;
             this.sceneSelectorBox.DataSource = scenes.ToList();
-            this.sceneSelectorBox.SelectedItem = null;
+            this.sceneSelectorBox.SelectedItem = "Clear";
             this.sceneSelectorBox.DropDownStyle= ComboBoxStyle.DropDownList;
             #endregion
 
             //List of various ideas here:
             //TODO: Add a series of dropdowns (or a new form?) allowing the user to select different files on their machine?
-            //TODO: have a "scene selector" dropdown which can autopopulate each button with a predefined set of stuff
+            //TODO: add more scenes to scene selector
             //TODO: Have a custom scene creator that adds different scenes to the list. 
             //TODO: make backgrounds not look terrible.
             //TODO: Dropdown for selecting background image (or toolbar option?)
@@ -147,6 +159,7 @@ namespace Soundboard
         private void selectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
+            if(comboBox.SelectedItem == null) { return; }
             string playerName = (string)comboBox.Tag;
             WMPLib.WindowsMediaPlayer wmp = wPlayerList[playerName];
 
@@ -187,7 +200,7 @@ namespace Soundboard
         }
 
         #region Functions for the scene selector dropdown
-        private void/*?*/ setScene(object sender, EventArgs e)
+        private void setScene(object sender, EventArgs e)
         {
             //TODO: Optimize the run of this, maybe make a function of the button stuff and fork those off as subprocs or something. 
             ComboBox comboBox = (ComboBox)sender;
@@ -197,6 +210,12 @@ namespace Soundboard
             string wplayerName;
             string soundName;
             WMPLib.WindowsMediaPlayer wmp;
+
+            if(sceneName == "Clear")
+            {
+                clearScene();
+                return;
+            }
 
             List<string> sounds = sceneList[sceneName];
             for(int i = 0; i < sounds.Count; i++)
@@ -218,9 +237,21 @@ namespace Soundboard
             }
         }
 
-        private void clearScene(object sender, EventArgs e)
+        private void clearScene()
         {
             //special function invoked by the scene "Clear"
+            foreach(Button btn in this.Controls.OfType<Button>())
+            {
+                //For every button except 9, which is music and not sounds
+                if (btn.Name[^1] != 9)
+                {
+                    btn.Text = "Select Sound";
+                    string wpname = "wplayer" + btn.Name[^1];
+                    WMPLib.WindowsMediaPlayer wmp = wPlayerList[wpname];
+                    wmp.URL = string.Empty;
+                    wmp.controls.stop();
+                }
+            }
         }
 
         private void populateScenes()
@@ -245,6 +276,8 @@ namespace Soundboard
                 
                 sceneList.Add(sceneName, sounds);
             }
+            //Add special "Clear" scene which empties the list.
+            sceneList.Add("Clear", null);
         }
         #endregion
 
