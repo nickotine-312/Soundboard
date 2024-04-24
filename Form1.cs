@@ -113,11 +113,11 @@ namespace Soundboard
 
             //List of various ideas here:
             //TODO: Add a series of dropdowns (or a new form?) allowing the user to select different files on their machine?
-            //TODO: add more scenes to scene selector
             //TODO: Have a custom scene creator that adds different scenes to the list. 
             //TODO: make backgrounds not look terrible.
             //TODO: Dropdown for selecting background image (or toolbar option?)
             //TODO: Fix stutter on first loop iteration.
+            //TODO: Optimize runtime of updateButton within populateScene
         }
 
         private void button_click(object sender, EventArgs e)
@@ -183,7 +183,6 @@ namespace Soundboard
             button9.Text = btn9MusicSelectBox.Text;
         }
 
-        //TODO: How to optimize the speed of this? In setScene, this function is called 8x. Can that be improved?
         private void updateButton(string btnName, string wpName, string sound)
         {
             this.Controls.Find(btnName, true)[0].Text = sound;
@@ -195,7 +194,6 @@ namespace Soundboard
         #region Functions for the scene selector dropdown
         private void setScene(object sender, EventArgs e)
         {
-            //TODO: Optimize the run of this, learn async. 
             ComboBox comboBox = (ComboBox)sender;
             if (comboBox.SelectedItem == null) { return; }
             string sceneName = (string)comboBox.Text;
@@ -235,7 +233,13 @@ namespace Soundboard
                     wmp.controls.stop();
                 }
             }
-            //TODO: Do we also reset volume sliders here?
+
+            foreach(TrackBar bar in this.Controls.OfType<TrackBar>())
+            {
+                bar.Value = 100;
+            }
+
+            //TODO: Do we also re-check looped here?
         }
 
         private void populateScenes()
@@ -249,13 +253,10 @@ namespace Soundboard
                 List<string> sounds = new List<string>();
 
                 StreamReader sr = new StreamReader(scene);
-                string line = sr.ReadLine();
-                while(line != null)
-                {
-                    Debug.WriteLine(line);
+                string line;
+                while((line = sr.ReadLine()) != null) 
                     sounds.Add(line);
-                    line = sr.ReadLine();
-                }
+
                 sr.Close();
                 
                 sceneList.Add(sceneName, sounds);

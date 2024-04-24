@@ -8,5 +8,6 @@ Current limitations include:
   * Not counting the one for music, of course
 * The background is boring
 * Have not yet deployed it as a standalone exe.
+* The Monument Studios royalty-free license is not included in the repo, since it counts for code statistics and makes the repo appear as `RTF` instead of `C#`
 
 Additional `TODO` comments throughout the project indicate other areas which I want to expand or improve. 
