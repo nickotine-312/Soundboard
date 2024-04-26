@@ -20,7 +20,7 @@ namespace Soundboard
         private Dictionary<string, WMPLib.WindowsMediaPlayer> wPlayerList = new Dictionary<string, WindowsMediaPlayer>();
         private List<SoundFile> soundDefaults = new List<SoundFile>();
         private List<SoundFile> musicDefaults = new List<SoundFile>();
-        private string validFileExtensions = @"\.(mp3|wav|m4a|avi)";
+        private string validFileExtensions = @"\.(mp3|wav|m4a|avi)"; //TODO: Anchor to end of string and test. 
 
         public Form1()
         {
@@ -53,7 +53,7 @@ namespace Soundboard
             List<String> fileNames = new List<String>();
             foreach (SoundFile file in soundDefaults)
             {
-                fileNames.Add(file.getDisplayName());
+                fileNames.Add(file.displayName);
             }
 
             //We call .ToList() to create a copy each time. Using the same object caused duplicate event issues.
@@ -96,7 +96,7 @@ namespace Soundboard
             List<String> songNames = new List<String>();
             foreach (SoundFile song in musicDefaults)
             {
-                songNames.Add(song.getDisplayName());
+                songNames.Add(song.displayName);
             }
             this.btn9MusicSelectBox.DataSource = songNames.ToList();
             this.btn9MusicSelectBox.SelectedItem = null;
@@ -164,7 +164,7 @@ namespace Soundboard
             string playerName = (string)comboBox.Tag;
             WMPLib.WindowsMediaPlayer wmp = wPlayerList[playerName];
             string buttonName = "button" + playerName[^1];
-            string newFileName = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(comboBox.Text)).getDisplayName();
+            string newFileName = soundDefaults.Find(soundFile => soundFile.displayName.Equals(comboBox.Text)).displayName;
 
             updateButton(buttonName, playerName, newFileName);
         }
@@ -175,7 +175,7 @@ namespace Soundboard
             ComboBox comboBox = (ComboBox)sender;
             if (comboBox.SelectedItem == null) { return; }
 
-            string newFileName = musicDefaults.Find(soundFile => soundFile.getDisplayName().Equals(btn9MusicSelectBox.Text)).getFilePath();
+            string newFileName = musicDefaults.Find(soundFile => soundFile.displayName.Equals(btn9MusicSelectBox.Text)).fullFilePath;
 
             wplayer9.URL = newFileName;
             wplayer9.controls.stop();
@@ -187,7 +187,7 @@ namespace Soundboard
         {
             this.Controls.Find(btnName, true)[0].Text = sound;
             WMPLib.WindowsMediaPlayer wmp = wPlayerList[wpName];
-            wmp.URL = soundDefaults.Find(soundFile => soundFile.getDisplayName().Equals(sound)).getFilePath();
+            wmp.URL = soundDefaults.Find(soundFile => soundFile.displayName.Equals(sound)).fullFilePath;
             wmp.controls.stop();
         }
 
@@ -218,7 +218,6 @@ namespace Soundboard
             }
         }
 
-        //special function invoked by the scene "Clear"
         private void clearScene()
         {
             foreach(Button btn in this.Controls.OfType<Button>())
@@ -235,9 +234,7 @@ namespace Soundboard
             }
 
             foreach(TrackBar bar in this.Controls.OfType<TrackBar>())
-            {
-                bar.Value = 100;
-            }
+                bar.Value = 100; //TODO: This doesn't reset #9 which is good, but, why? 
 
             //TODO: Do we also re-check looped here?
         }
@@ -268,18 +265,8 @@ namespace Soundboard
 
         private class SoundFile(string fpath, string dname)
         {
-            private string fullFilePath = fpath;
-            private string displayName = dname;
-
-            //We do not provide setters, as each value is known at creation, and will not change. 
-            public string getFilePath()
-            {
-                return fullFilePath;
-            }
-            public string getDisplayName()
-            {
-                return displayName;
-            }
+            public string fullFilePath { get; } = fpath;
+            public string displayName { get; } = dname;
         }
     }
 }
