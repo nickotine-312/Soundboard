@@ -263,10 +263,16 @@ namespace Soundboard
         }
         #endregion
 
-        private class SoundFile(string fpath, string dname)
+        private class SoundFile
         {
-            public string fullFilePath { get; } = fpath;
-            public string displayName { get; } = dname;
+            public string fullFilePath { get; }
+            public string displayName { get; }
+
+            public SoundFile(string fpath, string dname)
+            {
+                fullFilePath = fpath;
+                displayName = dname;
+            }
         }
     }
 }
