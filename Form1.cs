@@ -20,7 +20,7 @@ namespace Soundboard
         private Dictionary<string, WMPLib.WindowsMediaPlayer> wPlayerList = new Dictionary<string, WindowsMediaPlayer>();
         private List<SoundFile> soundDefaults = new List<SoundFile>();
         private List<SoundFile> musicDefaults = new List<SoundFile>();
-        private string validFileExtensions = @"\.(mp3|wav|m4a|avi)"; //TODO: Anchor to end of string and test. 
+        private string validFileExtensions = @"\.(mp3|wav|m4a|avi)$"; //TODO: Anchor to end of string and test. 
 
         public Form1()
         {
@@ -48,6 +48,7 @@ namespace Soundboard
                 displayName = displayName.Substring(0, displayName.IndexOf('.'));
                 soundDefaults.Add(new SoundFile(sound, displayName));
             }
+            //TODO: Implement customSounds loop to add custom sounds to soundDefaults<>
 
             //Grab only the display names, and populate the dropdowns.
             List<String> fileNames = new List<String>();
@@ -164,7 +165,7 @@ namespace Soundboard
             string playerName = (string)comboBox.Tag;
             WMPLib.WindowsMediaPlayer wmp = wPlayerList[playerName];
             string buttonName = "button" + playerName[^1];
-            string newFileName = soundDefaults.Find(soundFile => soundFile.displayName.Equals(comboBox.Text)).displayName;
+            string? newFileName = soundDefaults.Find(soundFile => soundFile.displayName.Equals(comboBox.Text))?.displayName;
 
             updateButton(buttonName, playerName, newFileName);
         }
@@ -175,7 +176,7 @@ namespace Soundboard
             ComboBox comboBox = (ComboBox)sender;
             if (comboBox.SelectedItem == null) { return; }
 
-            string newFileName = musicDefaults.Find(soundFile => soundFile.displayName.Equals(btn9MusicSelectBox.Text)).fullFilePath;
+            string? newFileName = musicDefaults.Find(soundFile => soundFile.displayName.Equals(btn9MusicSelectBox.Text))?.fullFilePath;
 
             wplayer9.URL = newFileName;
             wplayer9.controls.stop();
@@ -187,7 +188,7 @@ namespace Soundboard
         {
             this.Controls.Find(btnName, true)[0].Text = sound;
             WMPLib.WindowsMediaPlayer wmp = wPlayerList[wpName];
-            wmp.URL = soundDefaults.Find(soundFile => soundFile.displayName.Equals(sound)).fullFilePath;
+            wmp.URL = soundDefaults.Find(soundFile => soundFile.displayName.Equals(sound))?.fullFilePath;
             wmp.controls.stop();
         }
 
@@ -216,6 +217,8 @@ namespace Soundboard
 
                 updateButton(buttonName, wplayerName, soundName);
             }
+
+            resetVolumeAndLoop();
         }
 
         private void clearScene()
@@ -233,10 +236,7 @@ namespace Soundboard
                 }
             }
 
-            foreach(TrackBar bar in this.Controls.OfType<TrackBar>())
-                bar.Value = 100; //TODO: This doesn't reset #9 which is good, but, why? 
-
-            //TODO: Do we also re-check looped here?
+            resetVolumeAndLoop();
         }
 
         private void populateScenes()
@@ -261,10 +261,32 @@ namespace Soundboard
             //Add special "Clear" scene which empties the list.
             sceneList.Add("Clear", null);
         }
+
+        private void resetVolumeAndLoop()
+        {
+            foreach (TrackBar bar in this.Controls.OfType<TrackBar>())
+                bar.Value = 100; //TODO: This doesn't reset #9 which is good, but, why? 
+
+            foreach (CheckBox chk in this.Controls.OfType<CheckBox>())
+            {
+                if (chk.Name.Contains('9'))
+                    continue;
+                else
+                    chk.Checked = true;
+            }
+        }
+        #endregion
+
+        #region Functions for creating new scenes
+        private void createSceneButton(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         private class SoundFile
         {
+            //No setters are provided as each field is known at creation, and will not change. 
             public string fullFilePath { get; }
             public string displayName { get; }
 
