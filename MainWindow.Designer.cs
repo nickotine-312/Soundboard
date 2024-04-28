@@ -1,6 +1,6 @@
 ﻿namespace Soundboard
 {
-    partial class Form1
+    partial class MainWindow
     {
         /// <summary>
         ///  Required designer variable.
@@ -87,6 +87,7 @@
             checkBox6 = new CheckBox();
             checkBox7 = new CheckBox();
             checkBox8 = new CheckBox();
+            button10 = new Button();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
@@ -240,19 +241,21 @@
             groupBox1.Controls.Add(btn2FileSelectLabel);
             groupBox1.Controls.Add(btn1SoundSelectBox);
             groupBox1.Controls.Add(btn1FileSelectLabel);
-            groupBox1.Location = new Point(441, 226);
+            groupBox1.Font = new Font("Constantia", 12F);
+            groupBox1.Location = new Point(421, 288);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(223, 273);
+            groupBox1.Size = new Size(262, 273);
             groupBox1.TabIndex = 11;
             groupBox1.TabStop = false;
             groupBox1.Text = "Sound selector";
             // 
             // btn8SoundSelectBox
             // 
+            btn8SoundSelectBox.Font = new Font("Segoe UI", 9F);
             btn8SoundSelectBox.FormattingEnabled = true;
             btn8SoundSelectBox.Location = new Point(94, 237);
             btn8SoundSelectBox.Name = "btn8SoundSelectBox";
-            btn8SoundSelectBox.Size = new Size(121, 23);
+            btn8SoundSelectBox.Size = new Size(162, 23);
             btn8SoundSelectBox.TabIndex = 27;
             btn8SoundSelectBox.Tag = "wplayer8";
             btn8SoundSelectBox.Text = "Select Sound";
@@ -260,10 +263,11 @@
             // 
             // btn7SoundSelectBox
             // 
+            btn7SoundSelectBox.Font = new Font("Segoe UI", 9F);
             btn7SoundSelectBox.FormattingEnabled = true;
             btn7SoundSelectBox.Location = new Point(94, 207);
             btn7SoundSelectBox.Name = "btn7SoundSelectBox";
-            btn7SoundSelectBox.Size = new Size(121, 23);
+            btn7SoundSelectBox.Size = new Size(162, 23);
             btn7SoundSelectBox.TabIndex = 26;
             btn7SoundSelectBox.Tag = "wplayer7";
             btn7SoundSelectBox.Text = "Select Sound";
@@ -271,10 +275,11 @@
             // 
             // btn6SoundSelectBox
             // 
+            btn6SoundSelectBox.Font = new Font("Segoe UI", 9F);
             btn6SoundSelectBox.FormattingEnabled = true;
             btn6SoundSelectBox.Location = new Point(94, 177);
             btn6SoundSelectBox.Name = "btn6SoundSelectBox";
-            btn6SoundSelectBox.Size = new Size(121, 23);
+            btn6SoundSelectBox.Size = new Size(162, 23);
             btn6SoundSelectBox.TabIndex = 25;
             btn6SoundSelectBox.Tag = "wplayer6";
             btn6SoundSelectBox.Text = "Select Sound";
@@ -282,10 +287,11 @@
             // 
             // btn5SoundSelectBox
             // 
+            btn5SoundSelectBox.Font = new Font("Segoe UI", 9F);
             btn5SoundSelectBox.FormattingEnabled = true;
             btn5SoundSelectBox.Location = new Point(94, 147);
             btn5SoundSelectBox.Name = "btn5SoundSelectBox";
-            btn5SoundSelectBox.Size = new Size(121, 23);
+            btn5SoundSelectBox.Size = new Size(162, 23);
             btn5SoundSelectBox.TabIndex = 24;
             btn5SoundSelectBox.Tag = "wplayer5";
             btn5SoundSelectBox.Text = "Select Sound";
@@ -293,10 +299,11 @@
             // 
             // btn4SoundSelectBox
             // 
+            btn4SoundSelectBox.Font = new Font("Segoe UI", 9F);
             btn4SoundSelectBox.FormattingEnabled = true;
             btn4SoundSelectBox.Location = new Point(94, 117);
             btn4SoundSelectBox.Name = "btn4SoundSelectBox";
-            btn4SoundSelectBox.Size = new Size(121, 23);
+            btn4SoundSelectBox.Size = new Size(162, 23);
             btn4SoundSelectBox.TabIndex = 23;
             btn4SoundSelectBox.Tag = "wplayer4";
             btn4SoundSelectBox.Text = "Select Sound";
@@ -307,7 +314,7 @@
             btn8FileSelectLabel.AutoSize = true;
             btn8FileSelectLabel.Location = new Point(6, 240);
             btn8FileSelectLabel.Name = "btn8FileSelectLabel";
-            btn8FileSelectLabel.Size = new Size(55, 15);
+            btn8FileSelectLabel.Size = new Size(75, 19);
             btn8FileSelectLabel.TabIndex = 18;
             btn8FileSelectLabel.Text = "Button 8:";
             // 
@@ -316,7 +323,7 @@
             btn7FileSelectLabel.AutoSize = true;
             btn7FileSelectLabel.Location = new Point(6, 210);
             btn7FileSelectLabel.Name = "btn7FileSelectLabel";
-            btn7FileSelectLabel.Size = new Size(55, 15);
+            btn7FileSelectLabel.Size = new Size(74, 19);
             btn7FileSelectLabel.TabIndex = 19;
             btn7FileSelectLabel.Text = "Button 7:";
             // 
@@ -325,7 +332,7 @@
             btn6FileSelectLabel.AutoSize = true;
             btn6FileSelectLabel.Location = new Point(6, 180);
             btn6FileSelectLabel.Name = "btn6FileSelectLabel";
-            btn6FileSelectLabel.Size = new Size(55, 15);
+            btn6FileSelectLabel.Size = new Size(75, 19);
             btn6FileSelectLabel.TabIndex = 20;
             btn6FileSelectLabel.Text = "Button 6:";
             // 
@@ -334,7 +341,7 @@
             btn5FileSelectLabel.AutoSize = true;
             btn5FileSelectLabel.Location = new Point(6, 150);
             btn5FileSelectLabel.Name = "btn5FileSelectLabel";
-            btn5FileSelectLabel.Size = new Size(55, 15);
+            btn5FileSelectLabel.Size = new Size(74, 19);
             btn5FileSelectLabel.TabIndex = 21;
             btn5FileSelectLabel.Text = "Button 5:";
             // 
@@ -343,17 +350,18 @@
             btn4FileSelectLabel.AutoSize = true;
             btn4FileSelectLabel.Location = new Point(6, 120);
             btn4FileSelectLabel.Name = "btn4FileSelectLabel";
-            btn4FileSelectLabel.Size = new Size(55, 15);
+            btn4FileSelectLabel.Size = new Size(75, 19);
             btn4FileSelectLabel.TabIndex = 22;
             btn4FileSelectLabel.Text = "Button 4:";
             // 
             // btn3SoundSelectBox
             // 
+            btn3SoundSelectBox.Font = new Font("Segoe UI", 9F);
             btn3SoundSelectBox.FormattingEnabled = true;
             btn3SoundSelectBox.Location = new Point(94, 87);
             btn3SoundSelectBox.MaxDropDownItems = 16;
             btn3SoundSelectBox.Name = "btn3SoundSelectBox";
-            btn3SoundSelectBox.Size = new Size(121, 23);
+            btn3SoundSelectBox.Size = new Size(162, 23);
             btn3SoundSelectBox.TabIndex = 18;
             btn3SoundSelectBox.Tag = "wplayer3";
             btn3SoundSelectBox.Text = "Select Sound";
@@ -364,18 +372,19 @@
             btn3FileSelectLabel.AutoSize = true;
             btn3FileSelectLabel.Location = new Point(6, 90);
             btn3FileSelectLabel.Name = "btn3FileSelectLabel";
-            btn3FileSelectLabel.Size = new Size(55, 15);
+            btn3FileSelectLabel.Size = new Size(73, 19);
             btn3FileSelectLabel.TabIndex = 17;
             btn3FileSelectLabel.Text = "Button 3:";
             // 
             // btn2SoundSelectBox
             // 
             btn2SoundSelectBox.AllowDrop = true;
+            btn2SoundSelectBox.Font = new Font("Segoe UI", 9F);
             btn2SoundSelectBox.FormattingEnabled = true;
             btn2SoundSelectBox.Location = new Point(94, 57);
             btn2SoundSelectBox.MaxDropDownItems = 16;
             btn2SoundSelectBox.Name = "btn2SoundSelectBox";
-            btn2SoundSelectBox.Size = new Size(121, 23);
+            btn2SoundSelectBox.Size = new Size(162, 23);
             btn2SoundSelectBox.TabIndex = 16;
             btn2SoundSelectBox.Tag = "wplayer2";
             btn2SoundSelectBox.Text = "Select Sound";
@@ -386,7 +395,7 @@
             btn2FileSelectLabel.AutoSize = true;
             btn2FileSelectLabel.Location = new Point(6, 60);
             btn2FileSelectLabel.Name = "btn2FileSelectLabel";
-            btn2FileSelectLabel.Size = new Size(55, 15);
+            btn2FileSelectLabel.Size = new Size(74, 19);
             btn2FileSelectLabel.TabIndex = 2;
             btn2FileSelectLabel.Text = "Button 2:";
             // 
@@ -394,11 +403,12 @@
             // 
             btn1SoundSelectBox.AllowDrop = true;
             btn1SoundSelectBox.DisplayMember = "none";
+            btn1SoundSelectBox.Font = new Font("Segoe UI", 9F);
             btn1SoundSelectBox.FormattingEnabled = true;
             btn1SoundSelectBox.Location = new Point(94, 26);
             btn1SoundSelectBox.MaxDropDownItems = 16;
             btn1SoundSelectBox.Name = "btn1SoundSelectBox";
-            btn1SoundSelectBox.Size = new Size(121, 23);
+            btn1SoundSelectBox.Size = new Size(162, 23);
             btn1SoundSelectBox.TabIndex = 1;
             btn1SoundSelectBox.Tag = "wplayer1";
             btn1SoundSelectBox.Text = "Select Sound";
@@ -409,7 +419,7 @@
             btn1FileSelectLabel.AutoSize = true;
             btn1FileSelectLabel.Location = new Point(6, 30);
             btn1FileSelectLabel.Name = "btn1FileSelectLabel";
-            btn1FileSelectLabel.Size = new Size(55, 15);
+            btn1FileSelectLabel.Size = new Size(71, 19);
             btn1FileSelectLabel.TabIndex = 0;
             btn1FileSelectLabel.Text = "Button 1:";
             // 
@@ -425,9 +435,10 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(447, 190);
+            label3.Font = new Font("Constantia", 12F);
+            label3.Location = new Point(421, 187);
             label3.Name = "label3";
-            label3.Size = new Size(82, 15);
+            label3.Size = new Size(108, 19);
             label3.TabIndex = 13;
             label3.Text = "Scene selector";
             // 
@@ -436,7 +447,7 @@
             sceneSelectorBox.FormattingEnabled = true;
             sceneSelectorBox.Location = new Point(535, 187);
             sceneSelectorBox.Name = "sceneSelectorBox";
-            sceneSelectorBox.Size = new Size(121, 23);
+            sceneSelectorBox.Size = new Size(142, 23);
             sceneSelectorBox.TabIndex = 14;
             sceneSelectorBox.Text = "TBA";
             sceneSelectorBox.SelectedIndexChanged += setScene;
@@ -636,7 +647,7 @@
             groupBox2.Controls.Add(button9);
             groupBox2.Controls.Add(btn9MusicSelectBox);
             groupBox2.Controls.Add(trackBar9);
-            groupBox2.Location = new Point(700, 226);
+            groupBox2.Location = new Point(707, 297);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(200, 196);
             groupBox2.TabIndex = 33;
@@ -769,11 +780,22 @@
             checkBox8.UseVisualStyleBackColor = true;
             checkBox8.CheckedChanged += loop_toggle;
             // 
-            // Form1
+            // button10
+            // 
+            button10.Location = new Point(746, 178);
+            button10.Name = "button10";
+            button10.Size = new Size(120, 39);
+            button10.TabIndex = 42;
+            button10.Text = "Create Scene";
+            button10.UseVisualStyleBackColor = true;
+            button10.Click += createSceneButton;
+            // 
+            // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(984, 597);
+            Controls.Add(button10);
             Controls.Add(checkBox8);
             Controls.Add(checkBox7);
             Controls.Add(checkBox6);
@@ -812,7 +834,7 @@
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
-            Name = "Form1";
+            Name = "MainWindow";
             Text = "Nickotine's Soundboard";
             ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
             groupBox1.ResumeLayout(false);
@@ -892,5 +914,6 @@
         private CheckBox checkBox7;
         private CheckBox checkBox8;
         private CheckBox checkBox9;
+        private Button button10;
     }
 }

@@ -1,11 +1,12 @@
 using WMPLib;
 using System.Windows.Forms.VisualStyles;
 using System.Text.RegularExpressions;
-using System.Diagnostics; //TODO: Remove when done debugging
+using System.Diagnostics;
+using System.Runtime.CompilerServices; //TODO: Remove when done debugging
 
 namespace Soundboard
 {
-    public partial class Form1 : Form
+    public partial class MainWindow : Form
     {
         public WMPLib.WindowsMediaPlayer wplayer1;
         public WMPLib.WindowsMediaPlayer wplayer2;
@@ -20,9 +21,10 @@ namespace Soundboard
         private Dictionary<string, WMPLib.WindowsMediaPlayer> wPlayerList = new Dictionary<string, WindowsMediaPlayer>();
         private List<SoundFile> soundDefaults = new List<SoundFile>();
         private List<SoundFile> musicDefaults = new List<SoundFile>();
+        private List<String> fileNames        = new List<String>();
         private string validFileExtensions = @"\.(mp3|wav|m4a|avi)$"; //TODO: Anchor to end of string and test. 
 
-        public Form1()
+        public MainWindow()
         {
             InitializeComponent();
 
@@ -51,11 +53,8 @@ namespace Soundboard
             //TODO: Implement customSounds loop to add custom sounds to soundDefaults<>
 
             //Grab only the display names, and populate the dropdowns.
-            List<String> fileNames = new List<String>();
             foreach (SoundFile file in soundDefaults)
-            {
                 fileNames.Add(file.displayName);
-            }
 
             //We call .ToList() to create a copy each time. Using the same object caused duplicate event issues.
             this.btn1SoundSelectBox.DataSource = fileNames.ToList();
@@ -115,6 +114,8 @@ namespace Soundboard
             //List of various ideas here:
             //TODO: Add a series of dropdowns (or a new form?) allowing the user to select different files on their machine?
             //TODO: Have a custom scene creator that adds different scenes to the list. 
+            //TODO: Music button has default choice even when set to "Select Music" - disable
+            //TODO: A scene is loaded by default - run clear on open
             //TODO: make backgrounds not look terrible.
             //TODO: Dropdown for selecting background image (or toolbar option?)
             //TODO: Fix stutter on first loop iteration.
@@ -223,10 +224,11 @@ namespace Soundboard
 
         private void clearScene()
         {
+            
             foreach(Button btn in this.Controls.OfType<Button>())
             {
-                //For every button except 9, which is music and not sounds
-                if (btn.Name[^1] != 9)
+                //For only buttons 1-8 (which represent the Sound buttons.)
+                if (btn.Name[^1] > '0' && btn.Name[^1] < '9')
                 {
                     btn.Text = "Select Sound";
                     string wpname = "wplayer" + btn.Name[^1];
@@ -280,21 +282,27 @@ namespace Soundboard
         #region Functions for creating new scenes
         private void createSceneButton(object sender, EventArgs e)
         {
-
+            int newX = this.Location.X + this.Width;
+            Point newStart = new Point(newX, this.Location.Y);
+            NewSceneWindow newSceneWindow = new NewSceneWindow(newStart, fileNames);
+            newSceneWindow.Show();
+            //TODO: How to update scene dropdown after custom scene added?
         }
         #endregion
 
-        private class SoundFile
-        {
-            //No setters are provided as each field is known at creation, and will not change. 
-            public string fullFilePath { get; }
-            public string displayName { get; }
 
-            public SoundFile(string fpath, string dname)
-            {
-                fullFilePath = fpath;
-                displayName = dname;
-            }
+        
+    }
+    public class SoundFile
+    {
+        //No setters are provided as each field is known at creation, and will not change. 
+        public string fullFilePath { get; }
+        public string displayName { get; }
+
+        public SoundFile(string fpath, string dname)
+        {
+            fullFilePath = fpath;
+            displayName = dname;
         }
     }
 }
