@@ -50,7 +50,15 @@ namespace Soundboard
                 displayName = displayName.Substring(0, displayName.IndexOf('.'));
                 soundDefaults.Add(new SoundFile(sound, displayName));
             }
-            //TODO: Implement customSounds loop to add custom sounds to soundDefaults<>
+            string[] customSounds = Directory.GetFiles(@"Custom Sounds\");
+            foreach (string sound in customSounds)
+            {
+                if (!Regex.IsMatch(sound, validFileExtensions)) { continue; }
+
+                string displayName = sound.Replace(@"Custom Sounds\", "");
+                displayName = displayName.Substring(0, displayName.IndexOf('.'));
+                soundDefaults.Add(new SoundFile(sound, displayName));
+            }
 
             //Grab only the display names, and populate the dropdowns.
             foreach (SoundFile file in soundDefaults)

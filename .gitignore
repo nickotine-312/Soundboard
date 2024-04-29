@@ -27,6 +27,7 @@ x86/
 bld/
 [Bb]in/Debug
 ![Bb]in/Release/net8.0-windows*
+[Bb]in/Release/publish*
 [Oo]bj/
 [Oo]ut/
 [Ll]og/

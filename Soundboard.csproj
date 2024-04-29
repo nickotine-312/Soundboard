@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>test3.ico</ApplicationIcon>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -58,9 +58,10 @@
 
   <ItemGroup>
     <Folder Include="bin\Debug\net8.0-windows\Music\" />
-    <Folder Include="bin\Debug\net8.0-windows\CustomSounds\" />
+    <Folder Include="bin\Debug\net8.0-windows\Custom Sounds\" />
     <Folder Include="bin\Debug\net8.0-windows\Sounds\" />
-    <Folder Include="bin\Release\net8.0-windows\CustomSounds\" />
+    <Folder Include="bin\Release\net8.0-windows\bin\Release\" />
+    <Folder Include="bin\Release\net8.0-windows\Custom Sounds\" />
   </ItemGroup>
 
 </Project>
