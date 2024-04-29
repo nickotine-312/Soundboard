@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="bin\Release\net8.0-windows\publish\**" />
+    <EmbeddedResource Remove="bin\Release\net8.0-windows\publish\**" />
+    <None Remove="bin\Release\net8.0-windows\publish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="WMPLib">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>0</VersionMinor>
