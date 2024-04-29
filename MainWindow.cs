@@ -22,7 +22,7 @@ namespace Soundboard
         private List<SoundFile> soundDefaults = new List<SoundFile>();
         private List<SoundFile> musicDefaults = new List<SoundFile>();
         private List<String> fileNames        = new List<String>();
-        private string validFileExtensions = @"\.(mp3|wav|m4a|avi)$"; //TODO: Anchor to end of string and test. 
+        private string validFileExtensions = @"\.(mp3|wav|m4a|avi)$"; //TODO: Anchor to end of string - TEST. 
 
         public MainWindow()
         {
@@ -99,23 +99,22 @@ namespace Soundboard
                 songNames.Add(song.displayName);
             }
             this.btn9MusicSelectBox.DataSource = songNames.ToList();
-            this.btn9MusicSelectBox.SelectedItem = null;
             this.btn9MusicSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.btn9MusicSelectBox.SelectedItem = null;
             this.button9.Text = "Select Sound";
+            wplayer9.URL = null;
 
             //Third: Scenes
             populateScenes();
-            var scenes = sceneList.Keys;
-            this.sceneSelectorBox.DataSource = scenes.ToList();
+            //var scenes = sceneList.Keys;
+            this.sceneSelectorBox.DataSource = sceneList.Keys.ToList();//scenes.ToList();
             this.sceneSelectorBox.SelectedItem = "Clear";
             this.sceneSelectorBox.DropDownStyle= ComboBoxStyle.DropDownList;
             #endregion
 
             //List of various ideas here:
-            //TODO: Add a series of dropdowns (or a new form?) allowing the user to select different files on their machine?
-            //TODO: Have a custom scene creator that adds different scenes to the list. 
-            //TODO: Music button has default choice even when set to "Select Music" - disable
-            //TODO: A scene is loaded by default - run clear on open
+            //TODO: How to allow the user to select different files on their machine?
+            //TODO: Music+Sound buttons have default choice even when cleared - disable
             //TODO: make backgrounds not look terrible.
             //TODO: Dropdown for selecting background image (or toolbar option?)
             //TODO: Fix stutter on first loop iteration.
@@ -243,11 +242,15 @@ namespace Soundboard
 
         private void populateScenes()
         {
+            //The containsKey checks are due to this method being re-run whenever a new scene is added.
             string[] scenes = Directory.GetFiles(@"Scenes\");
             foreach(string scene in scenes)
             {
                 string sceneName = scene.Replace(@"Scenes\", "");
                 sceneName = sceneName.Substring(0, sceneName.IndexOf('.'));
+
+                if (sceneList.ContainsKey(sceneName))
+                    continue;
 
                 List<string> sounds = new List<string>();
 
@@ -261,7 +264,8 @@ namespace Soundboard
                 sceneList.Add(sceneName, sounds);
             }
             //Add special "Clear" scene which empties the list.
-            sceneList.Add("Clear", null);
+            if (!sceneList.ContainsKey("Clear"))
+                sceneList.Add("Clear", null);
         }
 
         private void resetVolumeAndLoop()
@@ -277,21 +281,20 @@ namespace Soundboard
                     chk.Checked = true;
             }
         }
-        #endregion
 
-        #region Functions for creating new scenes
         private void createSceneButton(object sender, EventArgs e)
         {
             int newX = this.Location.X + this.Width;
             Point newStart = new Point(newX, this.Location.Y);
             NewSceneWindow newSceneWindow = new NewSceneWindow(newStart, fileNames);
+            newSceneWindow.FormClosed += delegate { 
+                populateScenes();
+                this.sceneSelectorBox.DataSource = sceneList.Keys.ToList();
+                this.sceneSelectorBox.SelectedItem = "Clear";
+            };
             newSceneWindow.Show();
-            //TODO: How to update scene dropdown after custom scene added?
         }
         #endregion
-
-
-        
     }
     public class SoundFile
     {
